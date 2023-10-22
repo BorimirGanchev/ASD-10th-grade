@@ -3,18 +3,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-int addNumbers(int n) {
-  if (n != 0)
-    return n + addNumbers(n - 1);
+int addNumbers(int n, int recNum) {
+  if (n == 0)
+    return recNum;
   else
-    return n;
+    return addNumbers(n-1, recNum + n);
 }
 
-int power(int base, int a) {
-    if (a != 0)
-        return (base * power(base, a - 1));
+int powerSeccond(int base, int pow, int res) {
+    if (pow == 0)
+        return res;
     else
-        return 1;
+        return powerSeccond(base, pow-1, res * base);
+}
+
+int powerHelper(int base, int pow){
+  return powerSeccond(base, pow, 1);
 }
 
 int recursiveSum(vector_t *v, int index) {
@@ -36,10 +40,10 @@ bool isVectorPalindrome(vector_t *v, int left, int right) {
 
 int main() {
   int num = 5;
-  printf("Sum = %d \n", addNumbers(num));
+  printf("Sum = %d \n", addNumbers(num, 0));
 
   int pow = 2;
-  printf("%d^%d = %d  \n", num, pow, power(num, pow));
+  printf("%d^%d = %d  \n", num, pow, powerHelper(num, pow));
 
   vector_t *myVector = init_vector();
 
