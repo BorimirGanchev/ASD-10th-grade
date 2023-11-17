@@ -26,20 +26,8 @@ void resize(vector_t *v, int newCapacity)
 
 void push_back(vector_t *v, int val)
 {
-    /*
-        Реалокирането на памет е операция, която искаме да избегнем да правим на всяко добавяне на стойност.
-        Затова в нашата имплементация на вектор добавяме и капацитет, който указва количеството заделена памет,
-        която имаме на разположение, а size показва частта, която реално използваме в момента.
-        Така може да си позволим да реалокираме само когато size достигне capacity. Умножавайки capacity по някаква
-        константа като 2 (така работи и стандардния вектор в C++) или 1.5 си гарантираме, че няма да се налага
-        да реалокираме при всяко добавяне на елемент.
-        Да, това ще доведе до излишество на памет, така че ако искаме максимално оптимални с паметта няма нужда от
-        capacity и бихме реалокирали всеки път. Но в повечето случаи бързодействието е по-приоритетно от паметта,
-        особено когато излишеството не е голямо както в случая.
-    */
     if (v->size == v->capacity)
     {
-        // можеше да зададем някакъв начален капацитет за да не се налага да правим тази проверка
         if (v->capacity == 0)
         {
             v->capacity = 2;
@@ -56,10 +44,6 @@ void push_back(vector_t *v, int val)
     v->size++;
 }
 
-/*
-    pop не е стандардна функция за вектор. Повече се използва за други структури като опашка и стек, които ще разгледаме по-късно,
-    но понеже някой го спомена направихме и нея.
-*/
 int pop(vector_t *v)
 {
     if (v->size == 0)
@@ -120,6 +104,28 @@ void sort(vector_t *v, int size) {
     }
 }
 
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+void selectionSort(vector_t*v, int size){
+    int min_idx;
+    for(int i = 0; i < size-1; i++){
+        min_idx = i;
+        for(int j = i+1; j < size; j++){
+            if(v->arr[j] < v -> arr[min_idx]){
+                min_idx = j;
+            }
+            if(min_idx != 1){
+                swap(&v->arr[min_idx], &v->arr[i]);
+            }
+        }
+    }
+}
+
 
 int main() {
     vector_t *v = init_vector();
@@ -128,9 +134,9 @@ int main() {
     push_back(v, 2);
     push_back(v, 8);
     push_back(v, 1);
-    push_back(v, 9);
-    push_back(v, -4);   
+    push_back(v, 9);  
     push_back(v, 10);
+    push_back(v, 4);
     push_back(v, 200);
     push_back(v, -50);
     push_back(v, 0);
@@ -138,7 +144,7 @@ int main() {
 
     printVector(v);
 
-    sort(v, getSize(v));
+    selectionSort(v, getSize(v));
 
     printVector(v);;
 
