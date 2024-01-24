@@ -1,7 +1,3 @@
-// C program to demonstrate insert
-// operation in binary
-// search tree.
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,58 +6,88 @@ struct node {
 	struct node *left, *right;
 };
 
-// A utility function to create a new BST node
-struct node* newNode(int item)
-{
-	struct node* temp
-		= (struct node*)malloc(sizeof(struct node));
+struct node* newNode(int item) {
+	struct node* temp = (struct node*)malloc(sizeof(struct node));
 	temp->key = item;
 	temp->left = temp->right = NULL;
 	return temp;
-}
+};
 
-// A utility function to do inorder traversal of BST
-void inorder(struct node* root)
-{
-	if (root != NULL) {
-		inorder(root->left);
-		printf("%d ", root->key);
-		inorder(root->right);
-	}
-}
-
-// A utility function to insert
-// a new node with given key in BST
-struct node* insert(struct node* node, int key)
-{
-	// If the tree is empty, return a new node
+struct node* insert(struct node* node, int key) {
 	if (node == NULL)
 		return newNode(key);
 
-	// Otherwise, recur down the tree
 	if (key < node->key)
 		node->left = insert(node->left, key);
 	else if (key > node->key)
 		node->right = insert(node->right, key);
 
-	// Return the (unchanged) node pointer
 	return node;
-}
+};
 
-// Driver Code
-int main()
-{
+void inorder(struct node* root) {
+	if (root != NULL) {
+		inorder(root->left);
+		printf("%d ", root->key);
+		inorder(root->right);
+	}
+};
+
+struct node* minValueNode(struct node* node) {
+	struct node* current = node;
+
+	while (current->left != NULL)
+		current = current->left;
+
+	return current;
+};
+
+struct node* deleteNode(struct node* root, int key) {
+	if (root == NULL)
+		return root;
+
+	if (key < root->key)
+		root->left = deleteNode(root->left, key); 	
+	else if (key > root->key)
+		root->right = deleteNode(root->right, key);
+	else {
+		if (root->left == NULL) {
+			struct node* temp = root->right;
+			free(root);
+			return temp;
+		} else if (root->right == NULL) {
+			struct node* temp = root->left;
+			free(root);
+			return temp;
+		}
+
+		struct node* temp = minValueNode(root->right);
+		root->key = temp->key;
+		root->right = deleteNode(root->right, temp->key);
+	}
+
+	return root;
+};
+
+int main() {
 	struct node* root = NULL;
-	root = insert(root, 50);
-	insert(root, 30);
-	insert(root, 20);
-	insert(root, 40);
-	insert(root, 70);
-	insert(root, 60);
-	insert(root, 80);
+	root = insert(root, 5);
+	insert(root, 2);
+	insert(root, 13);
+	insert(root, 1);
+	insert(root, 3);
 
-	// Print inorder traversal of the BST
+	printf("Original BST: ");
+	inorder(root);
+
+    struct node* minNode = minValueNode(root);
+    printf("\nMinimum value node in BST: %d\n", minNode->key);
+
+	int keyToDelete = 2;
+	root = deleteNode(root, keyToDelete);
+
+	printf("BST after deleting node with key %d: ", keyToDelete);
 	inorder(root);
 
 	return 0;
-}
+};
