@@ -5,7 +5,6 @@
 
 #define MAX_FIGURES 10
 
-
 typedef struct {
     float x, y;
 } Point;
@@ -118,10 +117,8 @@ void insertShape(QuadTreeNode* node, void* shape) {
                     childIndex = 0;
                 }
             }
-
             insertShape(node->children[childIndex], node->figures[i]);
         }
-
         node->numFigures = 0;
     }
 }
@@ -236,13 +233,15 @@ void printFigures(FigureList* list) {
             } else {
                 printf("Unknown Figure Type\n");
             }
+            if(figureCount % 2 != 1){
+                printf("%*c\bAnd\n",7);
+            }
 
             figureCount++;
             
             if (figureCount % 2 == 0) {
                 printf("\n");
             }
-
         }
         current = current->next;
     }
