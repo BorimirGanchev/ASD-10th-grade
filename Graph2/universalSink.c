@@ -71,7 +71,7 @@ bool isUniversalSink(Graph *graph, int vertex) {
 
 
 int main() {
-    Graph *graph = init_graph(5);
+    Graph *graph = init_graph(4);
     addEdge(graph, 0, 2);
     addEdge(graph, 0, 3);
     addEdge(graph, 0, 1);
